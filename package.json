@@ -4,7 +4,7 @@
   "description": "Advent of Code 2023",
   "scripts": {
     "start": "nodemon -e ts --exec \"ts-node $1\"",
-    "create": "ts-node src/create.ts"
+    "create": "ts-node src/util/create.ts"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,12 @@
     "@types/node": "^20.10.2",
     "nodemon": "^3.0.2",
     "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "@types/jsdom": "^21.1.6",
+    "@types/node-fetch": "^2.6.9",
+    "dotenv": "^16.3.1",
+    "jsdom": "^23.0.1",
+    "node-fetch": "^2.7.0"
   }
 }
