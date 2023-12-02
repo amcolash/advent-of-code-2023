@@ -10,19 +10,17 @@ const template = join(__dirname, 'template.ts');
 
 if (!existsSync(dir)) mkdirSync(dir);
 
-cpSync(template, join(dir, 'part1.ts'));
-cpSync(template, join(dir, 'part2.ts'));
+const part1 = join(dir, 'part1.ts');
+const part2 = join(dir, 'part2.ts');
 
-writeFileSync(join(dir, 'input.txt'), '');
+if (!existsSync(part1)) cpSync(template, part1);
+if (!existsSync(part2)) cpSync(template, part2);
 
 getData(parseInt(day)).then((data) => {
-  writeFileSync(join(dir, 'info.html'), data.info || '');
+  writeFileSync(join(dir, 'info.md'), data.info || '');
 
-  if (data.examples[0]) {
-    writeFileSync(join(dir, 'sample.txt'), data.examples[0]);
-  } else {
-    writeFileSync(join(dir, 'sample.txt'), '');
-  }
+  if (data.examples[0]) writeFileSync(join(dir, 'sample1.txt'), data.examples[0]);
+  if (data.examples[1]) writeFileSync(join(dir, 'sample2.txt'), data.examples[1]);
 
   if (data.input) writeFileSync(join(dir, 'input.txt'), data.input);
 });

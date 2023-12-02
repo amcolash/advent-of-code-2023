@@ -17,15 +17,19 @@
   },
   "homepage": "https://github.com/amcolash/advent-of-code-2023#readme",
   "devDependencies": {
+    "@types/jsdom": "^21.1.6",
     "@types/node": "^20.10.2",
+    "@types/node-fetch": "^2.6.9",
+    "@types/turndown": "^5.0.4",
     "nodemon": "^3.0.2",
-    "ts-node": "^10.9.1"
+    "prettier": "^3.1.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2"
   },
   "dependencies": {
-    "@types/jsdom": "^21.1.6",
-    "@types/node-fetch": "^2.6.9",
     "dotenv": "^16.3.1",
     "jsdom": "^23.0.1",
-    "node-fetch": "^2.7.0"
+    "node-fetch": "^2.7.0",
+    "turndown": "^7.1.2"
   }
 }
