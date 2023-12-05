@@ -13,8 +13,8 @@ if (!existsSync(dir)) mkdirSync(dir);
 const part1 = join(dir, 'part1.ts');
 const part2 = join(dir, 'part2.ts');
 
-if (!existsSync(part1)) cpSync(template, part1);
-if (!existsSync(part2)) cpSync(template, part2);
+if (!existsSync(part1)) cpSync(template.replace('input.txt', 'sample1.txt'), part1);
+if (!existsSync(part2)) cpSync(template.replace('input.txt', 'sample2.txt'), part2);
 
 getData(parseInt(day)).then((data) => {
   writeFileSync(join(dir, 'info.md'), data.info || '');
