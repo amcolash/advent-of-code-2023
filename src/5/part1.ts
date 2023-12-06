@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-const data = readFileSync(join(__dirname, 'sample1.txt')).toString();
+const data = readFileSync(join(__dirname, 'input.txt')).toString();
 const lines = data.trim().split('\n');
 
 enum Section {
@@ -15,16 +15,17 @@ enum Section {
   HumidityLocation,
 }
 
-type mapping = { [key: number]: number };
+type Range = { srcStart: number; destStart: number; range: number };
+type mapping = Range[];
 
 let seeds: number[] = [];
-const seedSoil: mapping = {};
-const soilFertilizer: mapping = {};
-const fertilizerWater: mapping = {};
-const waterLight: mapping = {};
-const lightTemperature: mapping = {};
-const temperatureHumidity: mapping = {};
-const humidityLocation: mapping = {};
+const seedSoil: mapping = [];
+const soilFertilizer: mapping = [];
+const fertilizerWater: mapping = [];
+const waterLight: mapping = [];
+const lightTemperature: mapping = [];
+const temperatureHumidity: mapping = [];
+const humidityLocation: mapping = [];
 
 const sectionToMap = {
   [Section.SeedSoil]: seedSoil,
@@ -59,15 +60,13 @@ function parseMapping(l: string) {
   else if (l.trim().length === 0) {
     currentSection++;
     return;
-  } else if (map) {
+  } else {
     const split = l.split(' ');
     const destStart = Number.parseInt(split[0]);
     const srcStart = Number.parseInt(split[1]);
     const rangeLength = Number.parseInt(split[2]);
 
-    for (let i = 0; i < rangeLength; i++) {
-      map[srcStart + i] = destStart + i;
-    }
+    map.push({ destStart, srcStart, range: rangeLength });
   }
 }
 
@@ -75,20 +74,32 @@ function lookupLocations() {
   const locations: number[] = [];
 
   seeds.forEach((s) => {
-    const soil = seedSoil[s] || s;
-    const fertilizer = soilFertilizer[soil] || soil;
-    const water = fertilizerWater[fertilizer] || fertilizer;
-    const light = waterLight[water] || water;
-    const temperature = lightTemperature[light] || light;
-    const humidity = temperatureHumidity[temperature] || temperature;
-    const location = humidityLocation[humidity] || humidity;
+    const soil = findMapping(s, seedSoil);
+    const fertilizer = findMapping(soil, soilFertilizer);
+    const water = findMapping(fertilizer, fertilizerWater);
+    const light = findMapping(water, waterLight);
+    const temperature = findMapping(light, lightTemperature);
+    const humidity = findMapping(temperature, temperatureHumidity);
+    const location = findMapping(humidity, humidityLocation);
 
-    // console.log(s, soil, fertilizer, water, light, temperature, humidity, location);
     locations.push(location);
+    // console.log(s, soil, fertilizer, water, light, temperature, humidity, location);
   });
 
-  locations.sort();
-  console.log(locations);
+  locations.sort((a, b) => a - b);
+  console.log(locations[0]);
+}
+
+function findMapping(value: number, mapping: Range[]): number {
+  for (let i = 0; i < mapping.length; i++) {
+    const { srcStart, destStart, range } = mapping[i];
+    if (value >= srcStart && value < srcStart + range) {
+      const offset = value - srcStart;
+      return destStart + offset;
+    }
+  }
+
+  return value;
 }
 
 parseData();
